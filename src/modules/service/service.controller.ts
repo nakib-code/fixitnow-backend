@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { ServiceService } from "./service.service";
@@ -6,7 +7,8 @@ import { ServiceService } from "./service.service";
 const createService = catchAsync(async (req: any, res: Response) => {
   const result = await ServiceService.createService(
     req.user.id,
-    req.body
+    req.body,
+    req.file
   );
 
   sendResponse(res, {
@@ -58,7 +60,8 @@ const updateService = catchAsync(async (req: any, res: Response) => {
   const result = await ServiceService.updateService(
     req.user.id,
     req.params.id,
-    req.body
+    req.body,
+    req.file
   );
 
   sendResponse(res, {

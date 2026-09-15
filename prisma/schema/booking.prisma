@@ -1,30 +1,29 @@
-
 model Booking {
   id String @id @default(uuid())
 
   customerId String
-  customer User @relation("CustomerBookings", fields: [customerId], references: [id], onDelete: Cascade)
+  customer   User   @relation("CustomerBookings", fields: [customerId], references: [id], onDelete: Cascade)
 
   technicianId String
-  technician User @relation("TechnicianBookings", fields: [technicianId], references: [id], onDelete: Cascade)
+  technician   User   @relation("TechnicianBookings", fields: [technicianId], references: [id], onDelete: Cascade)
 
   serviceId String
-  service Service @relation(fields: [serviceId], references: [id])
+  service   Service @relation(fields: [serviceId], references: [id])
 
   bookingDate DateTime
 
   startTime String
-  endTime String
+  endTime   String
 
   address String
-  note String?
+  note    String?
 
-  totalAmount Decimal @db.Decimal(10,2)
+  totalAmount Decimal @db.Decimal(10, 2)
 
   status BookingStatus @default(REQUESTED)
 
   payment Payment?
-  review Review?
+  review  Review?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

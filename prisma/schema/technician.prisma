@@ -2,16 +2,16 @@ model TechnicianProfile {
   id String @id @default(uuid())
 
   userId String @unique
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  bio String?
-  experience Int @default(0)
-  location String
+  bio        String?
+  experience Int     @default(0)
+  location   String
 
   averageRating Float @default(0)
-  completedJobs Int @default(0)
+  completedJobs Int   @default(0)
 
-  services Service[]
+  services       Service[]
   availabilities Availability[]
 
   createdAt DateTime @default(now())

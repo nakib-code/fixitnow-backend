@@ -1,32 +1,32 @@
 model User {
-  id                 String      @id @default(uuid())
-  name               String
-  email              String      @unique
-  password           String
-  phone              String?     @unique
+  id       String  @id @default(uuid())
+  name     String
+  email    String  @unique
+  password String
+  phone    String? @unique
 
   profileImg         String?
   profileImgPublicId String?
 
-  address            String?
-  city               String?
-  postalCode         String?
+  address    String?
+  city       String?
+  postalCode String?
 
-  role               Role        @default(CUSTOMER)
-  status             UserStatus  @default(ACTIVE)
+  role   Role       @default(CUSTOMER)
+  status UserStatus @default(ACTIVE)
 
-  technicianProfile  TechnicianProfile?
+  technicianProfile TechnicianProfile?
 
-  customerBookings   Booking[]   @relation("CustomerBookings")
-  technicianBookings Booking[]   @relation("TechnicianBookings")
+  customerBookings   Booking[] @relation("CustomerBookings")
+  technicianBookings Booking[] @relation("TechnicianBookings")
 
-  payments           Payment[]   @relation("CustomerPayments")
+  payments Payment[] @relation("CustomerPayments")
 
-  customerReviews    Review[]    @relation("CustomerReviews")
-  technicianReviews  Review[]    @relation("TechnicianReviews")
+  customerReviews   Review[] @relation("CustomerReviews")
+  technicianReviews Review[] @relation("TechnicianReviews")
 
-  createdAt          DateTime    @default(now())
-  updatedAt          DateTime    @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([email])
   @@index([role])

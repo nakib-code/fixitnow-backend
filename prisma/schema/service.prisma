@@ -3,21 +3,28 @@ model Service {
 
   title       String
   description String
+  price       Decimal @db.Decimal(10, 2)
 
-  price       Decimal @db.Decimal(10,2)
-  duration    Int // Duration in minutes (e.g., 60, 90, 120)
+  duration Int // Duration in minutes (e.g., 60, 90, 120)
 
   isAvailable Boolean @default(true)
 
+  // Service image
+  image         String?
+  imagePublicId String?
+
   technicianId String
+
   technician TechnicianProfile @relation(fields: [technicianId], references: [id], onDelete: Cascade)
 
   categoryId String
+
   category Category @relation(fields: [categoryId], references: [id])
 
   bookings Booking[]
 
   createdAt DateTime @default(now())
+
   updatedAt DateTime @updatedAt
 
   @@index([technicianId])

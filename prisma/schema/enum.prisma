@@ -19,7 +19,6 @@ enum Day {
   FRIDAY
 }
 
-
 enum BookingStatus {
   REQUESTED
   ACCEPTED
@@ -29,7 +28,6 @@ enum BookingStatus {
   COMPLETED
   CANCELLED
 }
-
 
 enum PaymentProvider {
   STRIPE
