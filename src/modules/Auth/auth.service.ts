@@ -1,17 +1,23 @@
-import jwt, { JwtPayload, SignOptions } from "jsonwebtoken";
+import { JwtPayload } from "jsonwebtoken";
+import httpStatus from "http-status";
+import bcrypt from "bcryptjs";
+
 import config from "../../config";
 import { prisma } from "../../lib/prisma";
-import bcrypt from "bcryptjs";
-import { TLoginUser, TRegisterUser } from "./auth.interface";
 import { Role } from "../../../generated/prisma/enums";
 import { jwtUtils } from "../../utils/jwt";
-import httpStatus from "http-status";
+
+import { TLoginUser, TRegisterUser } from "./auth.interface";
 
 const register = async (payload: TRegisterUser) => {
-  if (payload.role !== Role.CUSTOMER && payload.role !== Role.TECHNICIAN) {
+  if (
+    payload.role !== Role.CUSTOMER &&
+    payload.role !== Role.TECHNICIAN
+  ) {
     const error: any = new Error(
       "Only CUSTOMER and TECHNICIAN registration is allowed.",
     );
+
     error.statusCode = httpStatus.BAD_REQUEST;
     throw error;
   }
@@ -24,6 +30,7 @@ const register = async (payload: TRegisterUser) => {
 
   if (isUserExist) {
     const error: any = new Error("User already exists");
+
     error.statusCode = httpStatus.CONFLICT;
     throw error;
   }
@@ -64,8 +71,6 @@ const register = async (payload: TRegisterUser) => {
   return result;
 };
 
-
-
 const login = async (payload: TLoginUser) => {
   const user = await prisma.user.findUnique({
     where: {
@@ -75,6 +80,7 @@ const login = async (payload: TLoginUser) => {
 
   if (!user) {
     const error: any = new Error("Invalid email or password");
+
     error.statusCode = httpStatus.UNAUTHORIZED;
     throw error;
   }
@@ -86,9 +92,11 @@ const login = async (payload: TLoginUser) => {
 
   if (!isPasswordMatched) {
     const error: any = new Error("Invalid email or password");
+
     error.statusCode = httpStatus.UNAUTHORIZED;
     throw error;
   }
+
   const accessToken = jwtUtils.createToken(
     {
       id: user.id,
@@ -96,7 +104,7 @@ const login = async (payload: TLoginUser) => {
       role: user.role,
     },
     config.jwt_access_secret,
-    config.jwt_access_expires_in as SignOptions,
+    config.jwt_access_expires_in,
   );
 
   const refreshToken = jwtUtils.createToken(
@@ -104,7 +112,7 @@ const login = async (payload: TLoginUser) => {
       id: user.id,
     },
     config.jwt_refresh_secret,
-    config.jwt_refresh_expires_in as SignOptions,
+    config.jwt_refresh_expires_in,
   );
 
   const { password, ...userData } = user;
@@ -115,8 +123,6 @@ const login = async (payload: TLoginUser) => {
     user: userData,
   };
 };
-
-
 
 const refreshToken = async (refreshToken: string) => {
   const verifiedRefreshToken = jwtUtils.verifyToken(
@@ -151,14 +157,13 @@ const refreshToken = async (refreshToken: string) => {
       role: user.role,
     },
     config.jwt_access_secret,
-    config.jwt_access_expires_in as SignOptions,
+    config.jwt_access_expires_in,
   );
 
   return {
     accessToken,
   };
 };
-
 
 const getMe = async (id: string) => {
   return prisma.user.findUnique({
@@ -171,6 +176,11 @@ const getMe = async (id: string) => {
       email: true,
       phone: true,
       profileImg: true,
+
+      address: true,
+      city: true,
+      postalCode: true,
+
       role: true,
       status: true,
       createdAt: true,
@@ -182,6 +192,6 @@ const getMe = async (id: string) => {
 export const AuthService = {
   register,
   login,
-  getMe,
   refreshToken,
+  getMe,
 };
