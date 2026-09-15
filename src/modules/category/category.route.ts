@@ -1,13 +1,16 @@
 import { Router } from "express";
+
 import auth from "../../middleware/auth";
 import { Role } from "../../../generated/prisma/enums";
 import { CategoryController } from "./category.controller";
+import { upload } from "../../middleware/upload";
 
 const router = Router();
 
 router.post(
   "/",
   auth(Role.ADMIN),
+  upload.single("icon"),
   CategoryController.createCategory
 );
 
@@ -19,6 +22,7 @@ router.get(
 router.patch(
   "/:id",
   auth(Role.ADMIN),
+  upload.single("icon"),
   CategoryController.updateCategory
 );
 

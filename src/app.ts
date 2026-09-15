@@ -13,6 +13,7 @@ import { TechnicianRoutes } from "./modules/Technician/technician.route";
 
 import { globalErrorHandler } from "./middleware/globalErrorHandler";
 import { notFound } from "./middleware/notFound";
+import { userRouter } from "./modules/user/user.route";
 
 const app: Application = express();
 
@@ -100,6 +101,8 @@ app.get("/", (req, res) => {
 app.use("/api/auth", AuthRoutes);
 
 app.use("/api/categories", CategoryRoutes);
+
+app.use("/api/users", userRouter);
 
 app.use("/api/technician", TechnicianRoutes);
 

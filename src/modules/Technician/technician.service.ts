@@ -75,24 +75,11 @@ const updateProfile = async (
     throw error;
   }
 
-  const { profileImg, ...profileData } = payload;
-
-  if (profileImg) {
-    await prisma.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        profileImg,
-      },
-    });
-  }
-
   return prisma.technicianProfile.update({
     where: {
       userId,
     },
-    data: profileData,
+    data: payload,
     include: {
       user: {
         select: {
